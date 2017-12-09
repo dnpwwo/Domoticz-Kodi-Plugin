@@ -41,3 +41,7 @@ Configuration Options:
 5. 'Notifier Name': Only used if 'Notifications' is true. This name will appear in the list of notification targets when you use the 'Notifications' Button. Notifications you send to this target will appear on screen.
 6. 'Time Out Lost Devices': When true, the devices in Domoitcz will have a red banner when network connectivity is lost to the Kodi.
 7. 'Debug': When true the logging level will be much higher to aid with troubleshooting
+
+## Change log
+
+1.9.0:  Initial upload version
