@@ -33,14 +33,15 @@ The Kodi itself must be set to allow it to be controlled by external programs. G
 
 ### Domoticz
 
-Configuration Options:
-1. 'IP Address': Will handle DNS names and IP V4 adderesses (e.g 192.168.xxx.xxx)
-2. 'Port': The port that the Kodi is listening on. Default 9090, will work unless you specifically changed it on your Kodi.  Do not set this to 80 or 8080. The plugin does not use a web interface on the Kodi.
-3. 'Icon': Dropdown to allow icon set selection
-4. 'Notifications': If true it will send notifications to the Kodi that will popup on the screen.
-5. 'Notifier Name': Only used if 'Notifications' is true. This name will appear in the list of notification targets when you use the 'Notifications' Button. Notifications you send to this target will appear on screen.
-6. 'Time Out Lost Devices': When true, the devices in Domoitcz will have a red banner when network connectivity is lost to the Kodi.
-7. 'Debug': When true the logging level will be much higher to aid with troubleshooting
+| Field | Information|
+| ----- | ---------- |
+| IP Address | Will handle DNS names and IP V4 adderesses (e.g 192.168.xxx.xxx) |
+| Port | The port that the Kodi is listening on. Default 9090, will work unless you specifically changed it on your Kodi.  Do not set this to 80 or 8080. The plugin does not use a web interface on the Kodi |
+| Icon | Dropdown to allow icon set selection |
+| Notifications | If true it will send notifications to the Kodi that will popup on the screen |
+| Notifier Name | Only used if 'Notifications' is true. This name will appear in the list of notification targets when you use the 'Notifications' Button. Notifications you send to this target will appear on screen |
+| Time Out Lost Devices | When true, the devices in Domoitcz will have a red banner when network connectivity is lost to the Kodi |
+| Debug | When true the logging level will be much higher to aid with troubleshooting |
 
 ## Change log
 
