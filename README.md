@@ -45,4 +45,6 @@ The Kodi itself must be set to allow it to be controlled by external programs. G
 
 ## Change log
 
-1.9.0:  Initial upload version
+| Version | Information|
+| ----- | ---------- |
+| 1.9.0 | Initial upload version |
