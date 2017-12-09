@@ -36,7 +36,7 @@ The Kodi itself must be set to allow it to be controlled by external programs. G
 
 | Field | Information|
 | ----- | ---------- |
-| IP Address | Will handle DNS names and IP V4 adderesses (e.g 192.168.xxx.xxx) |
+| IP Address | Will handle DNS names and IP V4 addresses (e.g 192.168.xxx.xxx) |
 | Port | The port that the Kodi is listening on. Default 9090, will work unless you specifically changed it on your Kodi.  Do not set this to 80 or 8080. The plugin does not use a web interface on the Kodi |
 | Icon | Dropdown to allow icon set selection |
 | Notifications | If true it will send notifications to the Kodi that will popup on the screen |
