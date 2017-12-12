@@ -19,9 +19,8 @@ Controls a single Kodi on your network.  If you have more than one you can creat
 Python version 3.4 or higher required & Domoticz version 3.87xx or greater.
 
 To install:
-* Go in your Domoticz directory, open the plugins directory and create a new one named 'Kodi' or similar.
-* Navigate to the directory using a command line
-* Run: ```git pull https://github.com/dnpwwo/Domoticz-Kodi-Plugin.git```
+* Go in your Domoticz directory using a command line and open the plugins directory.
+* Run: ```git clone https://github.com/dnpwwo/Domoticz-Kodi-Plugin.git```
 * Restart Domoticz.
 
 In the web UI, navigate to the Hardware page.  In the hardware dropdown there will be an entry called "Kodi Players".
