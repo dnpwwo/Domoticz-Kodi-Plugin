@@ -25,6 +25,13 @@ To install:
 
 In the web UI, navigate to the Hardware page.  In the hardware dropdown there will be an entry called "Kodi Players".
 
+## Updating
+
+To update:
+* Go in your Domoticz directory using a command line and open the plugins directory then the Domoticz-Kodi-Plugin directory.
+* Run: ```git pull```
+* Restart Domoticz.
+
 ## Configuration
 
 ### Kodi
