@@ -16,7 +16,7 @@ Controls a single Kodi on your network.  If you have more than one you can creat
 
 ## Installation
 
-Python version 3.4 or higher required & Domoticz version 3.7xxx or greater.
+Python version 3.4 or higher required & Domoticz version 3.87xx or greater.
 
 To install:
 * Go in your Domoticz directory, open the plugins directory and create a new one named 'Kodi' or similar.
