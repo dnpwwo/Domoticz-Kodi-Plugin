@@ -49,3 +49,4 @@ The Kodi itself must be set to allow it to be controlled by external programs. G
 | Version | Information|
 | ----- | ---------- |
 | 1.9.0 | Initial upload version |
+| 2.0.6 | Add support for GUI.Screensaver events |

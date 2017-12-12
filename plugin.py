@@ -3,7 +3,7 @@
 #           Author:     Dnpwwo, 2016 - 2017
 #
 """
-<plugin key="Kodi" name="Kodi Players" author="dnpwwo" version="1.9.0" wikilink="http://www.domoticz.com/wiki/plugins/Kodi.html" externallink="https://kodi.tv/">
+<plugin key="Kodi" name="Kodi Players" author="dnpwwo" version="2.0.6" wikilink="https://github.com/dnpwwo/Domoticz-Kodi-Plugin" externallink="https://kodi.tv/">
     <params>
         <param field="Address" label="IP Address" width="200px" required="true" default="127.0.0.1"/>
         <param field="Port" label="Port" width="30px" required="true" default="9090"/>
@@ -106,7 +106,11 @@ class BasePlugin:
     def onConnect(self, Connection, Status, Description):
         if (Status == 0):
             Domoticz.Log("Connected successfully to: "+Connection.Address+":"+Connection.Port)
-            self.playerState = 1
+            if (1 in Devices):
+                self.playerState = Devices[1].nValue
+                self.mediaDescrption = Devices[1].sValue
+            if (2 in Devices):
+                self.mediaLevel = Devices[2].nValue
             self.KodiConn.Send('{"jsonrpc":"2.0","method":"System.GetProperties","params":{"properties":["canhibernate","cansuspend","canshutdown"]},"id":1007}')
             self.KodiConn.Send('{"jsonrpc":"2.0","method":"Application.GetProperties","id":1011,"params":{"properties":["volume","muted"]}}')
             self.KodiConn.Send('{"jsonrpc":"2.0","method":"Player.GetActivePlayers","id":1001}')
@@ -174,6 +178,14 @@ class BasePlugin:
             elif (Response["method"] == "System.OnQuit") or (Response["method"] == "System.OnSleep") or (Response["method"] == "System.OnRestart"):
                 Domoticz.Debug("System.OnQuit recieved.")
                 self.ClearDevices()
+            elif (Response["method"] == "GUI.OnScreensaverActivated"):
+                Domoticz.Log("GUI.OnScreensaverActivated recieved, Player ID: "+str(self.playerID))
+                self.playerState = 9
+                self.mediaDescrption = "Screensaver"
+            elif (Response["method"] == "GUI.OnScreensaverDeactivated"):
+                Domoticz.Log("GUI.OnScreensaverDeactivated recieved, Player ID: "+str(self.playerID))
+                self.playerState = 1
+                self.mediaDescrption = ""
             else:
                 Domoticz.Debug("Unhandled unsolicited response: "+strData)
         else:
@@ -522,8 +534,11 @@ class BasePlugin:
     def ClearDevices(self):
         # Stop everything and make sure things are synced
         self.playerID = -1
-        self.playerState = 1
-        self.mediaDescrption = ""
+        if self.playerState == 9:
+            self.mediaDescrption = "Screensaver"
+        else:
+            self.playerState = 1
+            self.mediaDescrption = ""
         self.percentComplete = 0
         if Parameters["Mode5"] != "False":
             TimedOut = 0
