@@ -3,7 +3,7 @@
 #           Author:     Dnpwwo, 2016 - 2017
 #
 """
-<plugin key="Kodi" name="Kodi Players" author="dnpwwo" version="2.0.6" wikilink="https://github.com/dnpwwo/Domoticz-Kodi-Plugin" externallink="https://kodi.tv/">
+<plugin key="Kodi" name="Kodi Players" author="dnpwwo" version="2.1.6" wikilink="https://github.com/dnpwwo/Domoticz-Kodi-Plugin" externallink="https://kodi.tv/">
     <params>
         <param field="Address" label="IP Address" width="200px" required="true" default="127.0.0.1"/>
         <param field="Port" label="Port" width="30px" required="true" default="9090"/>
@@ -19,6 +19,7 @@
                 <option label="Hibernate" value="Hibernate"/>
                 <option label="Suspend" value="Suspend"/>
                 <option label="Shutdown" value="Shutdown"/>
+                <option label="Sleep" value="Sleep"/>
                 <option label="Ignore" value="Ignore" default="true" />
             </options>
         </param>
@@ -291,7 +292,14 @@ class BasePlugin:
                 if (Response["result"] == "OK"):
                     Domoticz.Log("Shutdown command accepted.")
                 else:
-                    Domoticz.Error("Shutdown command unsuccerssful response: '"+str(Response["result"])+"'")
+                    Domoticz.Error("Shutdown command unsuccessful response: '"+str(Response["result"])+"'")
+            elif (Response["id"] == 1009):
+                if (Response["result"] == "OK"):
+                    Domoticz.Log("Sleep command accepted.")
+                    self.playerState = 9
+                    self.mediaDescrption = "Screensaver"
+                else:
+                    Domoticz.Error("Sleep command unsuccessful response: '"+str(Response["result"])+"'")
             elif (Response["id"] == 1010):
                 Domoticz.Log("Executed Addon successfully")
             elif (Response["id"] == 1011):
@@ -514,6 +522,8 @@ class BasePlugin:
                 self.KodiConn.Send('{"jsonrpc":"2.0","method":"System.Shutdown","id":1008}')
             else:
                 Domoticz.Error("Configured Shutdown option: 'Shutdown' not support by attached Kodi.")
+        elif (Parameters["Mode2"] == "Sleep"):
+            self.KodiConn.Send('{"jsonrpc":"2.0","method":"GUI.ActivateWindow","id":1009,"params":{"window":"screensaver"}}')
         else:
             Domoticz.Error("Unknown Shutdown option, ID:"+str(Parameters["Mode2"])+".")
         return
