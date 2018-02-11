@@ -3,7 +3,7 @@
 #           Author:     Dnpwwo, 2016 - 2017
 #
 """
-<plugin key="Kodi" name="Kodi Players" author="dnpwwo" version="2.1.6" wikilink="https://github.com/dnpwwo/Domoticz-Kodi-Plugin" externallink="https://kodi.tv/">
+<plugin key="Kodi" name="Kodi Players" author="dnpwwo" version="2.2.1" wikilink="https://github.com/dnpwwo/Domoticz-Kodi-Plugin" externallink="https://kodi.tv/">
     <params>
         <param field="Address" label="IP Address" width="200px" required="true" default="127.0.0.1"/>
         <param field="Port" label="Port" width="30px" required="true" default="9090"/>
@@ -523,7 +523,15 @@ class BasePlugin:
             else:
                 Domoticz.Error("Configured Shutdown option: 'Shutdown' not support by attached Kodi.")
         elif (Parameters["Mode2"] == "Sleep"):
-            self.KodiConn.Send('{"jsonrpc":"2.0","method":"GUI.ActivateWindow","id":1009,"params":{"window":"screensaver"}}')
+            # There is no JSON command to turn on screensaver so use UDP, setting window to Screensaver is not the same
+            import xmbcclient3
+            packet = xmbcclient3.PacketACTION(actionmessage="ActivateScreensaver")
+            udpBcastConn = Domoticz.Connection(Name="UDP Broadcast Connection", Transport="UDP/IP", Protocol="None", Address=Parameters["Address"], Port=str(9777))
+            for a in range ( 0, packet.num_packets() ):
+                try:
+                    udpBcastConn.Send(packet.get_udp_message(a+1))
+                except:
+                    return
         else:
             Domoticz.Error("Unknown Shutdown option, ID:"+str(Parameters["Mode2"])+".")
         return
