@@ -1,9 +1,9 @@
 #           Kodi Plugin
 #
-#           Author:     Dnpwwo, 2016 - 2017
+#           Author:     Dnpwwo, 2016 - 2018
 #
 """
-<plugin key="Kodi" name="Kodi Players" author="dnpwwo" version="2.2.1" wikilink="https://github.com/dnpwwo/Domoticz-Kodi-Plugin" externallink="https://kodi.tv/">
+<plugin key="Kodi" name="Kodi Players" author="dnpwwo" version="2.2.3" wikilink="https://github.com/dnpwwo/Domoticz-Kodi-Plugin" externallink="https://kodi.tv/">
     <params>
         <param field="Address" label="IP Address" width="200px" required="true" default="127.0.0.1"/>
         <param field="Port" label="Port" width="30px" required="true" default="9090"/>
@@ -78,7 +78,7 @@ class BasePlugin:
         if (len(Devices) == 0):
             Domoticz.Device(Name="Status",  Unit=1, Type=17,  Switchtype=17).Create()
             Options = {"LevelActions": "||||", 
-                       "LevelNames": "Off|Video|Music|TV Shows|Live TV",
+                       "LevelNames": "Off|Video|Music|TV Shows|Live TV|Pictures|Weather",
                        "LevelOffHidden": "false",
                        "SelectorStyle": "1"}
             Domoticz.Device(Name="Source",  Unit=2, TypeName="Selector Switch", Switchtype=18, Image=12, Options=Options).Create()
@@ -367,12 +367,13 @@ class BasePlugin:
                 if (params.capitalize() == 'Level') or (Command.lower() == 'Volume'):
                     if (Unit == 2):  # Source selector
                         self.mediaLevel = Level
-                        # valid windows name list http://kodi.wiki/view/JSON-RPC_API/v6#GUI.Window
-                        if (self.mediaLevel == 10): self.KodiConn.Send('{"jsonrpc":"2.0","method":"GUI.ActivateWindow","params":{"window":"music"}}')
-                        if (self.mediaLevel == 20): self.KodiConn.Send('{"jsonrpc":"2.0","method":"GUI.ActivateWindow","params":{"window":"videos"}}')
-                        if (self.mediaLevel == 30): self.KodiConn.Send('{"jsonrpc":"2.0","method":"GUI.ActivateWindow","params":{"window":"video"}}')
-                        if (self.mediaLevel == 40): self.KodiConn.Send('{"jsonrpc":"2.0","method":"GUI.ActivateWindow","params":{"window":"pictures"}}')
-                        if (self.mediaLevel == 50): self.KodiConn.Send('{"jsonrpc":"2.0","method":"GUI.ActivateWindow","params":{"window":"pvr"}}')
+                        # valid windows name list http://kodi.wiki/view/JSON-RPC_API/v8#GUI.Window
+                        if (self.mediaLevel == 10): self.KodiConn.Send('{"jsonrpc":"2.0","method":"GUI.ActivateWindow","params":{"window":"videos"}}')
+                        if (self.mediaLevel == 20): self.KodiConn.Send('{"jsonrpc":"2.0","method":"GUI.ActivateWindow","params":{"window":"music"}}')
+                        if (self.mediaLevel == 30): self.KodiConn.Send('{"jsonrpc":"2.0","method":"GUI.ActivateWindow","params":{"window":"tvrecordings"}}')
+                        if (self.mediaLevel == 40): self.KodiConn.Send('{"jsonrpc":"2.0","method":"GUI.ActivateWindow","params":{"window":"pvr"}}')
+                        if (self.mediaLevel == 50): self.KodiConn.Send('{"jsonrpc":"2.0","method":"GUI.ActivateWindow","params":{"window":"pictures"}}')
+                        if (self.mediaLevel == 60): self.KodiConn.Send('{"jsonrpc":"2.0","method":"GUI.ActivateWindow","params":{"window":"weather"}}')
                         TimedOut = 0
                         for Device in Devices:
                             TimedOut = Devices[Device].TimedOut
