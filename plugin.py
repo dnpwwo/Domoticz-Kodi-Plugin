@@ -396,7 +396,7 @@ class BasePlugin:
                     Domoticz.Log( "'"+action+"' command ignored, No active Player ID. Kodi has not reported that it is playing media.")
             elif (action == 'Rewind'):
                 if (self.playerID != -1):
-                    self.KodiConn.Send('{"jsonrpc":"2.0","method":"Player.Seek","params":{"playerid":' + str(self.playerID) + ',"value":'0'}}')
+                    self.KodiConn.Send('{"jsonrpc":"2.0","method":"Player.Seek","params":{"playerid":' + str(self.playerID) + ',"value":0}}')
                 else:
                     Domoticz.Log( "'"+action+"' command ignored, No active Player ID. Kodi has not reported that it is playing media.")
             elif (action == 'Stop') or (action == 'Stopped'):
