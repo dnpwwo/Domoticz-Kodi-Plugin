@@ -3,7 +3,7 @@
 #           Author:     Dnpwwo, 2016 - 2018
 #
 """
-<plugin key="Kodi" name="Kodi Players" author="dnpwwo" version="2.2.3" wikilink="https://github.com/dnpwwo/Domoticz-Kodi-Plugin" externallink="https://kodi.tv/">
+<plugin key="Kodi" name="Kodi Players" author="dnpwwo" version="2.3.11" wikilink="https://github.com/dnpwwo/Domoticz-Kodi-Plugin" externallink="https://kodi.tv/">
     <params>
         <param field="Address" label="IP Address" width="200px" required="true" default="127.0.0.1"/>
         <param field="Port" label="Port" width="30px" required="true" default="9090"/>
@@ -129,13 +129,17 @@ class BasePlugin:
         if ('error' in Response):
             # Kodi has signalled and error
             if (Response["id"] == 1010):
-                Domoticz.Log("Addon execution request failed: "+Data)
+                Domoticz.Log("Addon execution request failed: "+str(Data))
             elif (Response["id"] == 2002):
                 self.KodiConn.Send('{"jsonrpc":"2.0","method":"Playlist.Add","params":{"playlistid":1,"item":{"directory":"special://profile/playlists/music/'+self.playlistName+'.xsp\", "media":"music"}},"id":2003}')
             elif (Response["id"] == 2003):
                 Domoticz.Error("Playlist '"+self.playlistName+"' could not be added, probably does not exist.")
             else:
-                Domoticz.Error("Unhandled error response: "+Data)
+                try:
+                    Domoticz.Error("Unhandled error response: '"+Response["error"]["message"]+"' : '"+Response["error"]["data"]["stack"]["message"]+"'")
+                except:
+                    Domoticz.Error("Unhandled error response: "+str(Data))
+                
         elif ('id' not in Response):
             # Events do not have an 'id' because we didn't request them
             if (Response["method"] == "Application.OnVolumeChanged"):
@@ -385,10 +389,17 @@ class BasePlugin:
                         self.KodiConn.Send('{"jsonrpc":"2.0","method":"Player.Seek","params":{"playerid":' + str(self.playerID) + ',"value":'+str(Level)+'}}')
                     else:
                         Domoticz.Error( "Unknown Unit number in command "+str(Unit)+".")
-            elif (action == 'Play') or (action == 'Pause'):
+            elif (action == 'Play') or (action == 'Playing') or (action == 'Pause') or (action == 'Paused'):
                 if (self.playerID != -1):
                     self.KodiConn.Send('{"jsonrpc":"2.0","method":"Player.PlayPause","params":{"playerid":' + str(self.playerID) + ',"play":false}}')
-            elif (action == 'Stop'):
+                else:
+                    Domoticz.Log( "'"+action+"' command ignored, No active Player ID. Kodi has not reported that it is playing media.")
+            elif (action == 'Rewind'):
+                if (self.playerID != -1):
+                    self.KodiConn.Send('{"jsonrpc":"2.0","method":"Player.Seek","params":{"playerid":' + str(self.playerID) + ',"value":'0'}}')
+                else:
+                    Domoticz.Log( "'"+action+"' command ignored, No active Player ID. Kodi has not reported that it is playing media.")
+            elif (action == 'Stop') or (action == 'Stopped'):
                 self.KodiConn.Send('{"jsonrpc":"2.0","method":"Input.ExecuteAction","params":{"action":"stop"},"id":1006}')
             elif (action == 'Trigger'):
                 self.KodiConn.Send('{"jsonrpc":"2.0","method":"Input.ExecuteAction","params":{"action":"stop"},"id":1006}')
@@ -435,6 +446,12 @@ class BasePlugin:
                 self.KodiConn.Send('{"jsonrpc":"2.0","method":"Input.Left","params":{},"id":1006}')
             elif (action == 'Right'):
                 self.KodiConn.Send('{"jsonrpc":"2.0","method":"Input.Right","params":{},"id":1006}')
+            elif (action == 'Video'): # Blockly command
+                self.KodiConn.Send('{"jsonrpc":"2.0","method":"GUI.ActivateWindow","params":{"window":"videos"}}')
+            elif (action == 'Audio'): # Blockly command
+                self.KodiConn.Send('{"jsonrpc":"2.0","method":"GUI.ActivateWindow","params":{"window":"music"}}')
+            elif (action == 'Photo'): # Blockly command
+                self.KodiConn.Send('{"jsonrpc":"2.0","method":"GUI.ActivateWindow","params":{"window":"pictures"}}')
             else:
                 # unknown so just assume its a keypress
                 self.KodiConn.Send('{"jsonrpc":"2.0","method":"Input.ExecuteAction","params":{"action":"'+action.lower()+'"},"id":1006}')
