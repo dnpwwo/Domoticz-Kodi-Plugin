@@ -3,7 +3,23 @@
 #           Author:     Dnpwwo, 2016 - 2018
 #
 """
-<plugin key="Kodi" name="Kodi Players" author="dnpwwo" version="2.3.11" wikilink="https://github.com/dnpwwo/Domoticz-Kodi-Plugin" externallink="https://kodi.tv/">
+<plugin key="Kodi" name="Kodi Players" author="dnpwwo" version="2.4.2" wikilink="https://github.com/dnpwwo/Domoticz-Kodi-Plugin" externallink="https://kodi.tv/">
+    <description>
+		<h2>Kodi Media Player Plugin</h2><br/>
+		<h3>Features</h3>
+		<ul style="list-style-type:square">
+			<li>Comes with three selectable icon sets</li>
+			<li>Display Domoticz notifications on Kodi screen</li>
+			<li>Multiple Shutdown action options</li>
+		</ul>
+		<h3>Devices</h3>
+		<ul style="list-style-type:square">
+			<li>Status</li>
+			<li>Volume</li>
+			<li>Source</li>
+			<li>Playing</li>
+		</ul>
+    </description>
     <params>
         <param field="Address" label="IP Address" width="200px" required="true" default="127.0.0.1"/>
         <param field="Port" label="Port" width="30px" required="true" default="9090"/>
@@ -389,7 +405,12 @@ class BasePlugin:
                         self.KodiConn.Send('{"jsonrpc":"2.0","method":"Player.Seek","params":{"playerid":' + str(self.playerID) + ',"value":'+str(Level)+'}}')
                     else:
                         Domoticz.Error( "Unknown Unit number in command "+str(Unit)+".")
-            elif (action == 'Play') or (action == 'Playing') or (action == 'Pause') or (action == 'Paused'):
+            elif (action == 'Play') or (action == 'Playing'):
+                if (self.playerID != -1):
+                    self.KodiConn.Send('{"jsonrpc":"2.0","method":"Player.PlayPause","params":{"playerid":' + str(self.playerID) + ',"play":true}}')
+                else:
+                    Domoticz.Log( "'"+action+"' command ignored, No active Player ID. Kodi has not reported that it is playing media.")
+            elif (action == 'Pause') or (action == 'Paused'):
                 if (self.playerID != -1):
                     self.KodiConn.Send('{"jsonrpc":"2.0","method":"Player.PlayPause","params":{"playerid":' + str(self.playerID) + ',"play":false}}')
                 else:
