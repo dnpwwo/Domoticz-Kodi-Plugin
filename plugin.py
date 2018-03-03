@@ -3,22 +3,23 @@
 #           Author:     Dnpwwo, 2016 - 2018
 #
 """
-<plugin key="Kodi" name="Kodi Players" author="dnpwwo" version="2.4.2" wikilink="https://github.com/dnpwwo/Domoticz-Kodi-Plugin" externallink="https://kodi.tv/">
+<plugin key="Kodi" name="Kodi Players" author="dnpwwo" version="2.4.3" wikilink="https://github.com/dnpwwo/Domoticz-Kodi-Plugin" externallink="https://kodi.tv/">
     <description>
-		<h2>Kodi Media Player Plugin</h2><br/>
-		<h3>Features</h3>
-		<ul style="list-style-type:square">
-			<li>Comes with three selectable icon sets</li>
-			<li>Display Domoticz notifications on Kodi screen</li>
-			<li>Multiple Shutdown action options</li>
-		</ul>
-		<h3>Devices</h3>
-		<ul style="list-style-type:square">
-			<li>Status</li>
-			<li>Volume</li>
-			<li>Source</li>
-			<li>Playing</li>
-		</ul>
+        <h2>Kodi Media Player Plugin</h2><br/>
+        <h3>Features</h3>
+        <ul style="list-style-type:square">
+            <li>Comes with three selectable icon sets: Default, Black and Round</li>
+            <li>Display Domoticz notifications on Kodi screen if a Notifier name is specified and events configured for that notifier</li>
+            <li>Multiple Shutdown action options</li>
+            <li>When network connectivity is lost the Domoticz UI will optionally show the device(s) with a Red banner</li>
+        </ul>
+        <h3>Devices</h3>
+        <ul style="list-style-type:square">
+            <li>Status - Basic status indicator, On/Off. Also has icon for Kodi Remote popup</li>
+            <li>Volume - Icon mutes/unmutes, slider shows/sets volume</li>
+            <li>Source - Selector switch for content source: Video, Music, TV Shows, Live TV, Photos, Weather</li>
+            <li>Playing - Icon Pauses/Resumes, slider shows/sets percentage through media</li>
+        </ul>
     </description>
     <params>
         <param field="Address" label="IP Address" width="200px" required="true" default="127.0.0.1"/>
@@ -492,25 +493,30 @@ class BasePlugin:
                     return
 
     def onHeartbeat(self):
-        if (self.KodiConn.Connected()):
-            if (self.oustandingPings > 6):
-                self.KodiConn.Disconnect()
-                self.nextConnect = 0
-            else:
-                if (self.playerID == -1):
-                    self.KodiConn.Send('{"jsonrpc":"2.0","method":"Player.GetActivePlayers","id":1001}')
+        try:
+            if (self.KodiConn.Connected()):
+                if (self.oustandingPings > 6):
+                    self.KodiConn.Disconnect()
+                    self.nextConnect = 0
                 else:
-                    self.KodiConn.Send('{"jsonrpc":"2.0","method":"Player.GetProperties","id":1002,"params":{"playerid":' + str(self.playerID) + ',"properties":["live","percentage","speed"]}}')
-                self.oustandingPings = self.oustandingPings + 1
-        else:
-            # if not connected try and reconnected every 3 heartbeats
-            self.oustandingPings = 0
-            self.nextConnect = self.nextConnect - 1
-            if (self.nextConnect <= 0):
-                self.nextConnect = 3
-                self.KodiConn.Connect()
-        return True
-
+                    if (self.playerID == -1):
+                        self.KodiConn.Send('{"jsonrpc":"2.0","method":"Player.GetActivePlayers","id":1001}')
+                    else:
+                        self.KodiConn.Send('{"jsonrpc":"2.0","method":"Player.GetProperties","id":1002,"params":{"playerid":' + str(self.playerID) + ',"properties":["live","percentage","speed"]}}')
+                    self.oustandingPings = self.oustandingPings + 1
+            else:
+                # if not connected try and reconnected every 3 heartbeats
+                self.oustandingPings = 0
+                self.nextConnect = self.nextConnect - 1
+                if (self.nextConnect <= 0):
+                    self.nextConnect = 3
+                    self.KodiConn.Connect()
+            return True
+        except:
+            Domoticz.Log("Unhandled exception in onHeartbeat, forcing disconnect.")
+            self.onDisconnect(self.KodiConn)
+            self.KodiConn = None
+        
     def onDisconnect(self, Connection):
         Domoticz.Log("Device has disconnected")
         if Parameters["Mode5"] != "False":
