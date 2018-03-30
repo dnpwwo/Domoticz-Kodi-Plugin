@@ -3,7 +3,7 @@
 #           Author:     Dnpwwo, 2016 - 2018
 #
 """
-<plugin key="Kodi" name="Kodi Players" author="dnpwwo" version="2.4.3" wikilink="https://github.com/dnpwwo/Domoticz-Kodi-Plugin" externallink="https://kodi.tv/">
+<plugin key="Kodi" name="Kodi Players" author="dnpwwo" version="2.5.4" wikilink="https://github.com/dnpwwo/Domoticz-Kodi-Plugin" externallink="https://kodi.tv/">
     <description>
         <h2>Kodi Media Player Plugin</h2><br/>
         <h3>Features</h3>
@@ -53,10 +53,15 @@
                 <option label="False" value="False" />
             </options>
         </param>
-        <param field="Mode6" label="Debug" width="75px">
+        <param field="Mode6" label="Debug" width="150px">
             <options>
-                <option label="True" value="Debug"/>
-                <option label="False" value="Normal"  default="true" />
+                <option label="None" value="0"  default="true" />
+                <option label="Python Only" value="2"/>
+                <option label="Basic Debugging" value="62"/>
+                <option label="Basic+Messages" value="126"/>
+                <option label="Connections Only" value="64"/>
+                <option label="Connections+Queue" value="144"/>
+                <option label="All" value="-1"/>
             </options>
         </param>
     </params>
@@ -84,8 +89,8 @@ class BasePlugin:
     playlistPos = 0
 
     def onStart(self):
-        if Parameters["Mode6"] == "Debug":
-            Domoticz.Debugging(1)
+        if Parameters["Mode6"] != "0":
+            Domoticz.Debugging(int(Parameters["Mode6"]))
             DumpConfigToLog()
         
         if ('Kodi'  not in Images): Domoticz.Image('Kodi Icons.zip').Create()
