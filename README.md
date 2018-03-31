@@ -63,3 +63,4 @@ The Kodi itself must be set to allow it to be controlled by external programs. G
 | 2.4.2 | Bug fix: Changed handling for Play and Pause commands from scripts. |
 | 2.4.3 | Added exception handling to onHeartbeat. |
 | 2.5.4 | Upgraded error logging options. |
+| 2.5.6 | onHeartneat fix for when Device 2 does not exist. |

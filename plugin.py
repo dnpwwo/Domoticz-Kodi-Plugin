@@ -3,7 +3,7 @@
 #           Author:     Dnpwwo, 2016 - 2018
 #
 """
-<plugin key="Kodi" name="Kodi Players" author="dnpwwo" version="2.5.4" wikilink="https://github.com/dnpwwo/Domoticz-Kodi-Plugin" externallink="https://kodi.tv/">
+<plugin key="Kodi" name="Kodi Players" author="dnpwwo" version="2.5.6" wikilink="https://github.com/dnpwwo/Domoticz-Kodi-Plugin" externallink="https://kodi.tv/">
     <description>
         <h2>Kodi Media Player Plugin</h2><br/>
         <h3>Features</h3>
@@ -59,7 +59,7 @@
                 <option label="Python Only" value="2"/>
                 <option label="Basic Debugging" value="62"/>
                 <option label="Basic+Messages" value="126"/>
-                <option label="Connections Only" value="64"/>
+                <option label="Connections Only" value="16"/>
                 <option label="Connections+Queue" value="144"/>
                 <option label="All" value="-1"/>
             </options>
@@ -590,8 +590,9 @@ class BasePlugin:
         # Make sure that the Domoticz devices are in sync (by definition, the device is connected)
         if (1 in Devices):
             UpdateDevice(1, self.playerState, self.mediaDescrption, TimedOut)
-        if (2 in Devices) and (Devices[2].nValue != self.mediaLevel) or (Devices[2].TimedOut != TimedOut):
-            UpdateDevice(2, self.mediaLevel, str(self.mediaLevel), TimedOut)
+        if (2 in Devices):
+            if (Devices[2].nValue != self.mediaLevel) or (Devices[2].TimedOut != TimedOut):
+                UpdateDevice(2, self.mediaLevel, str(self.mediaLevel), TimedOut)
         if (4 in Devices):
             if (self.playerState == 4) or (self.playerState == 5):
                 UpdateDevice(4, 2, str(self.percentComplete), TimedOut)
