@@ -55,16 +55,13 @@ The Kodi itself must be set to allow it to be controlled by external programs. G
 | Command | Information |
 | ----- | ---------- |
 | On | For 'Volume' Device - Turns mute off, <br/>For 'Playing' Device - Resume playback |
-| Set Volume <vol><br/>Set Level <level> | For 'Volume' Device - Sets volume percentage to 'vol', <br/>For 'Playing' Device - Sets position in media to 'level' percent<br/>For Source device - Sets current Window |
-| Play<br/>
-Playing | Resumes playing current media |
-| Pause<br/>
-Paused | Pauses playing current media |
+| Set Volume &lt;vol><br/>Set Level &lt;level&gt; | For 'Volume' Device - Sets volume percentage to &lt;vol&gt;, <br/>For 'Playing' Device - Sets position in media to &lt;level&gt; percent<br/>For Source device - Sets current Window |
+| Play<br/>Playing | Resumes playing current media |
+| Pause<br/>Paused | Pauses playing current media |
 | Rewind | Sets position in current media back to the start |
-| Stop<br/>
-Stopped | Stops playing current media |
-| Trigger Playlist <name> <position> | Start playing playlist <name> optionally at the supplied <position> |
-| Trigger Favorites <position> | Start playing favorites optionally at the supplied <position> |
+| Stop<br/>Stopped | Stops playing current media |
+| Trigger Playlist &lt;name&gt; &lt;position&gt; | Start playing playlist &lt;name&gt; optionally at the supplied &lt;position&gt; |
+| Trigger Favorites &lt;position&gt; | Start playing favorites optionally at the supplied <position> |
 | Run <params> | Execute add on <params> |
 | Off | For 'Volume' Device - Turns mute on, <br/>For 'Playing' Device - Pause playback |
 | Video | Show Kodi 'Videos' window |
