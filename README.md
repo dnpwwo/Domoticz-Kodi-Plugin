@@ -40,7 +40,7 @@ The Kodi itself must be set to allow it to be controlled by external programs. G
 
 ### Domoticz
 
-| Field | Information|
+| Field | Information |
 | ----- | ---------- |
 | IP Address | Will handle DNS names and IP V4 addresses (e.g 192.168.xxx.xxx) |
 | Port | The port that the Kodi is listening on. Default 9090, will work unless you specifically changed it on your Kodi.  Do not set this to 80 or 8080. The plugin does not use a web interface on the Kodi |
@@ -50,9 +50,30 @@ The Kodi itself must be set to allow it to be controlled by external programs. G
 | Time Out Lost Devices | When true, the devices in Domoitcz will have a red banner when network connectivity is lost to the Kodi |
 | Debug | When true the logging level will be much higher to aid with troubleshooting |
 
+## Supported Commands
+
+| Command | Information|
+| ----- | ---------- |
+| On | For 'Volume' Device - Turns mute off, <br/>For 'Playing' Device - Resume playback |
+| Set Volume <vol><br/>Set Level <level> | For 'Volume' Device - Sets volume percentage to 'vol', <br/>For 'Playing' Device - Sets position in media to 'level' percent<br/>For Source device - Sets current Window |
+| Play<br/>
+Playing | Resumes playing current media |
+| Pause<br/>
+Paused | Pauses playing current media |
+| Rewind | Sets position in current media back to the start |
+| Stop<br/>
+Stopped | Stops playing current media |
+| Trigger Playlist <name> <position> | Start playing playlist <name> optionally at the supplied <position> |
+| Trigger Favorites <position> | Start playing favorites optionally at the supplied <position> |
+| Run <params> | Execute add on <params> |
+| Off | For 'Volume' Device - Turns mute on, <br/>For 'Playing' Device - Pause playback |
+| Video | Show Kodi 'Videos' window |
+| Audio | Show Kodi 'Music' window |
+| Photo | Show Kodi 'Pictures' window |
+
 ## Change log
 
-| Version | Information|
+| Version | Information |
 | ----- | ---------- |
 | 1.9.0 | Initial upload version |
 | 2.0.6 | Add support for GUI.Screensaver events |
