@@ -52,7 +52,7 @@ The Kodi itself must be set to allow it to be controlled by external programs. G
 
 ## Supported Commands
 
-| Command | Information|
+| Command | Information |
 | ----- | ---------- |
 | On | For 'Volume' Device - Turns mute off, <br/>For 'Playing' Device - Resume playback |
 | Set Volume <vol><br/>Set Level <level> | For 'Volume' Device - Sets volume percentage to 'vol', <br/>For 'Playing' Device - Sets position in media to 'level' percent<br/>For Source device - Sets current Window |
