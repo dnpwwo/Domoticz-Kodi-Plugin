@@ -61,7 +61,7 @@ The Kodi itself must be set to allow it to be controlled by external programs. G
 | Rewind | Sets position in current media back to the start |
 | Stop<br/>Stopped | Stops playing current media |
 | Trigger Playlist &lt;name&gt; &lt;position&gt; | Start playing playlist &lt;name&gt; optionally at the supplied &lt;position&gt; |
-| Trigger Favorites &lt;position&gt; | Start playing favorites optionally at the supplied <position> |
+| Trigger Favorites &lt;position&gt; | Start playing favorites optionally at the supplied &lt;position&gt; |
 | Run <params> | Execute add on <params> |
 | Off | For 'Volume' Device - Turns mute on, <br/>For 'Playing' Device - Pause playback |
 | Video | Show Kodi 'Videos' window |
