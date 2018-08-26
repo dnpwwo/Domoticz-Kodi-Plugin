@@ -3,7 +3,7 @@
 #           Author:     Dnpwwo, 2016 - 2018
 #
 """
-<plugin key="Kodi" name="Kodi Players" author="dnpwwo" version="2.5.6" wikilink="https://github.com/dnpwwo/Domoticz-Kodi-Plugin" externallink="https://kodi.tv/">
+<plugin key="Kodi" name="Kodi Players" author="dnpwwo" version="2.6.4" wikilink="https://github.com/dnpwwo/Domoticz-Kodi-Plugin" externallink="https://kodi.tv/">
     <description>
         <h2>Kodi Media Player Plugin</h2><br/>
         <h3>Features</h3>
@@ -69,7 +69,6 @@
 """
 import Domoticz
 import sys
-import json
 
 class BasePlugin:
     KodiConn = None
@@ -145,13 +144,12 @@ class BasePlugin:
                 UpdateDevice(Key, 0, Devices[Key].sValue, 1)
         return True
 
-    def onMessage(self, Connection, Data):
-        strData = Data.decode("utf-8", "ignore")
-        Response = json.loads(strData)
+    def onMessage(self, Connection, Response):
         if ('error' in Response):
             # Kodi has signalled and error
             if (Response["id"] == 1010):
-                Domoticz.Log("Addon execution request failed: "+str(Data))
+                Domoticz.Log("Addon execution request failed.")
+                DumpJSONResponseToLog(Response)
             elif (Response["id"] == 2002):
                 self.KodiConn.Send('{"jsonrpc":"2.0","method":"Playlist.Add","params":{"playlistid":1,"item":{"directory":"special://profile/playlists/music/'+self.playlistName+'.xsp\", "media":"music"}},"id":2003}')
             elif (Response["id"] == 2003):
@@ -160,7 +158,8 @@ class BasePlugin:
                 try:
                     Domoticz.Error("Unhandled error response: '"+Response["error"]["message"]+"' : '"+Response["error"]["data"]["stack"]["message"]+"'")
                 except:
-                    Domoticz.Error("Unhandled error response: "+str(Data))
+                    Domoticz.Error("Unhandled error response.")
+                    DumpJSONResponseToLog(Response)
                 
         elif ('id' not in Response):
             # Events do not have an 'id' because we didn't request them
@@ -214,9 +213,12 @@ class BasePlugin:
                 self.playerState = 1
                 self.mediaDescrption = ""
             else:
-                Domoticz.Debug("Unhandled unsolicited response: "+strData)
+                Domoticz.Debug("Unhandled unsolicited response.")
+                if Parameters["Mode6"] != "0":
+                    DumpJSONResponseToLog(Response)
         else:
-            Domoticz.Debug(str(Response["id"])+" response received: "+strData)
+            if Parameters["Mode6"] != "0":
+                DumpJSONResponseToLog(Response)
             # Responses to requests made by the plugin
             if (Response["id"] == 1001):    # PING call when nothing is playing
                 if self.playerState == 0: self.playerState = 1
@@ -363,9 +365,10 @@ class BasePlugin:
                 else:
                     Domoticz.Log("No Favourites returned.");
             elif (Response["id"] == 2101):
-                Domoticz.Log( "2101: To be handled: "+strData)
+                Domoticz.Log( "2101: To be handled.")
+                DumpJSONResponseToLog(Response)
             else:
-                Domoticz.Debug("Unknown Response: "+strData)
+                Domoticz.Error("Unknown Response.")
         self.SyncDevices(0)
         return True
 
@@ -674,7 +677,18 @@ def DumpConfigToLog():
         Domoticz.Debug("Device LastLevel: " + str(Devices[x].LastLevel))
         Domoticz.Debug("Device Image:     " + str(Devices[x].Image))
     return
- 
+
+def DumpJSONResponseToLog(jsonDict):
+    if isinstance(jsonDict, dict):
+        Domoticz.Log("JSON Response Details ("+str(len(jsonDict))+"):")
+        for x in jsonDict:
+            if isinstance(jsonDict[x], dict):
+                Domoticz.Log("--->'"+x+" ("+str(len(jsonDict[x]))+"):")
+                for y in jsonDict[x]:
+                    Domoticz.Log("------->'" + y + "':'" + str(jsonDict[x][y]) + "'")
+            else:
+                Domoticz.Log("--->'" + x + "':'" + str(jsonDict[x]) + "'")
+
 def UpdateDevice(Unit, nValue, sValue, TimedOut):
     # Make sure that the Domoticz device still exists (they can be deleted) before updating it 
     if (Unit in Devices):
