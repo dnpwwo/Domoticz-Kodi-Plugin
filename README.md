@@ -81,5 +81,5 @@ The Kodi itself must be set to allow it to be controlled by external programs. G
 | 2.4.2 | Bug fix: Changed handling for Play and Pause commands from scripts. |
 | 2.4.3 | Added exception handling to onHeartbeat. |
 | 2.5.4 | Upgraded error logging options. This requires you to go to the Hardware page and re-configure the Debug parameter otherwise you will see an 'onStart' error in the Domoticz log |
-| 2.5.6 | onHeartneat fix for when Device 2 does not exist. |
+| 2.5.6 | onHeartbeat fix for when Device 2 does not exist. |
 | 2.6.4 | Handles Domoticz returning structured JSON messages |
