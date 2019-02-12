@@ -3,7 +3,7 @@
 #           Author:     Dnpwwo, 2016 - 2018
 #
 """
-<plugin key="Kodi" name="Kodi Players" author="dnpwwo" version="2.6.4" wikilink="https://github.com/dnpwwo/Domoticz-Kodi-Plugin" externallink="https://kodi.tv/">
+<plugin key="Kodi" name="Kodi Players" author="dnpwwo" version="2.6.5" wikilink="https://github.com/dnpwwo/Domoticz-Kodi-Plugin" externallink="https://kodi.tv/">
     <description>
         <h2>Kodi Media Player Plugin</h2><br/>
         <h3>Features</h3>
@@ -164,16 +164,16 @@ class BasePlugin:
         elif ('id' not in Response):
             # Events do not have an 'id' because we didn't request them
             if (Response["method"] == "Application.OnVolumeChanged"):
-                Domoticz.Debug("Application.OnVolumeChanged recieved.")
+                Domoticz.Debug("Application.OnVolumeChanged received.")
                 if (Response["params"]["data"]["muted"] == True):
                     UpdateDevice(3, 0, int(Response["params"]["data"]["volume"]), 0)
                 else:
                     UpdateDevice(3, 2, int(Response["params"]["data"]["volume"]), 0)
-            elif (Response["method"] == "Player.OnStop") or(Response["method"] == "System.OnWake"):
-                Domoticz.Debug("Player.OnStop recieved.")
+            elif (Response["method"] == "Player.OnStop") or (Response["method"] == "System.OnWake"):
+                Domoticz.Debug("Player.OnStop received.")
                 self.ClearDevices()
-            elif (Response["method"] == "Player.OnPlay"):
-                Domoticz.Debug("Player.OnPlay recieved, Player ID: "+str(self.playerID))
+            elif (Response["method"] == "Player.OnPlay") or (Response["method"] == "Player.OnResume"):
+                Domoticz.Debug("Player.OnPlay/OnResume received, Player ID: "+str(self.playerID))
                 self.playerID = Response["params"]["data"]["player"]["playerid"]
                 if (Response["params"]["data"]["item"]["type"] == "picture"):
                     self.playerState = 6
@@ -192,7 +192,7 @@ class BasePlugin:
                 if (self.playerID != -1):
                     self.KodiConn.Send('{"jsonrpc":"2.0","method":"Player.GetItem","id":1003,"params":{"playerid":' + str(self.playerID) + ',"properties":["artist","album","year","channel","showtitle","season","episode","title"]}}')
             elif (Response["method"] == "Player.OnPause"):
-                Domoticz.Debug("Player.OnPause recieved, Player ID: "+str(self.playerID))
+                Domoticz.Debug("Player.OnPause received, Player ID: "+str(self.playerID))
                 self.playerState = 2
                 self.SyncDevices(0)
             elif (Response["method"] == "Player.OnSeek"):
@@ -200,16 +200,16 @@ class BasePlugin:
                     self.KodiConn.Send('{"jsonrpc":"2.0","method":"Player.GetProperties","id":1002,"params":{"playerid":' + str(self.playerID) + ',"properties":["live","percentage","speed"]}}')
                 else:
                     self.KodiConn.Send('{"jsonrpc":"2.0","method":"Player.GetActivePlayers","id":1005}')
-                Domoticz.Debug("Player.OnSeek recieved, Player ID: "+str(self.playerID))
+                Domoticz.Debug("Player.OnSeek received, Player ID: "+str(self.playerID))
             elif (Response["method"] == "System.OnQuit") or (Response["method"] == "System.OnSleep") or (Response["method"] == "System.OnRestart"):
-                Domoticz.Debug("System.OnQuit recieved.")
+                Domoticz.Debug("System.OnQuit received.")
                 self.ClearDevices()
             elif (Response["method"] == "GUI.OnScreensaverActivated"):
-                Domoticz.Log("GUI.OnScreensaverActivated recieved, Player ID: "+str(self.playerID))
+                Domoticz.Log("GUI.OnScreensaverActivated received, Player ID: "+str(self.playerID))
                 self.playerState = 9
                 self.mediaDescrption = "Screensaver"
             elif (Response["method"] == "GUI.OnScreensaverDeactivated"):
-                Domoticz.Log("GUI.OnScreensaverDeactivated recieved, Player ID: "+str(self.playerID))
+                Domoticz.Log("GUI.OnScreensaverDeactivated received, Player ID: "+str(self.playerID))
                 self.playerState = 1
                 self.mediaDescrption = ""
             else:
